@@ -1,4 +1,9 @@
 from langchain_core.tools import tool
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "rag"))
+from retrieve import hybrid_search, rerank
 
 # Mock database simulating incident log records
 INCIDENT_DATABASE = [
@@ -18,6 +23,7 @@ INCIDENT_DATABASE = [
     }
 ]
 
+
 @tool
 def search_incidents(query: str) -> str:
     """Search for historical incident summaries matching a keyword query."""
@@ -31,6 +37,7 @@ def search_incidents(query: str) -> str:
         return f"No incidents found matching query: '{query}'"
     return "\n".join(matches)
 
+
 @tool
 def get_incident_details(incident_id: str) -> str:
     """Retrieve full diagnostic logs and metadata details for a specific incident ID."""
@@ -42,5 +49,14 @@ def get_incident_details(incident_id: str) -> str:
             )
     return f"Incident ID '{incident_id}' not found in database records."
 
-# Export both investigation tools exactly as required by agent.py
-ALL_TOOLS = [search_incidents, get_incident_details]
+
+@tool
+def search_evidence(query: str) -> str:
+    """Search safety policies and incident reports using hybrid retrieval (dense + BM25 + reranking) to find the most relevant supporting evidence."""
+    candidates = hybrid_search(query, top_k=10)
+    top = rerank(query, candidates, top_k=3)
+    return "\n\n".join(f"[{c['doc_id']}] {c['text']}" for c in top)
+
+
+# Export all investigation tools exactly as required by agent.py
+ALL_TOOLS = [search_incidents, get_incident_details, search_evidence]
