@@ -1,51 +1,30 @@
-﻿import json
+import json
 import requests
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "llama3.1"
+OLLAMA_MODEL = "llama3.2:1b"
 
 EXTRACTION_SYSTEM_PROMPT = (
     "You are an entity and relationship extractor for AegisAI, "
     "an incident investigation system. Given a raw incident report, extract entities and "
-    "relationships as JSON ONLY -- no preamble, no markdown fences, no explanation.
-
-"
-    "Allowed entity types: Person, Incident, Location, Camera, Policy, Document
-"
-    "Allowed relationship types: INVOLVED_IN, OCCURRED_AT, DETECTED_BY, VIOLATES, MENTIONED_IN, SIMILAR_TO
-
-"
-    "Output must match this exact JSON shape:
-"
-    "{
-"
-    "  ""entities"": [
-"
-    "    {""type"": ""Person"", ""id"": ""P001"", ""name"": ""Worker 001""}
-"
-    "  ],
-"
-    "  ""relationships"": [
-"
-    "    {""source"": ""P001"", ""type"": ""INVOLVED_IN"", ""target"": ""INC001""}
-"
-    "  ]
-"
-    "}
-
-"
-    "Rules:
-"
-    "- Invent stable, short IDs (P001, INC001, SITE001, CAM03, POL001) if the text does not give one.
-"
-    "- Reuse the SAME id for the same real-world entity if it is mentioned more than once.
-"
-    "- Every Incident needs: id, type, severity (LOW/MEDIUM/HIGH/CRITICAL), timestamp (ISO 8601).
-"
-    "- If you are not confident about an entity or relationship, omit it rather than guessing.
-"
-    "- Return ONLY the JSON object. Nothing else.
-"
+    "relationships as JSON ONLY -- no preamble, no markdown fences, no explanation.\n\n"
+    "Allowed entity types: Person, Incident, Location, Camera, Policy, Document\n"
+    "Allowed relationship types: INVOLVED_IN, OCCURRED_AT, DETECTED_BY, VIOLATES, MENTIONED_IN, SIMILAR_TO\n\n"
+    "Output must match this exact JSON shape:\n"
+    "{\n"
+    "  \"entities\": [\n"
+    "    {\"type\": \"Person\", \"id\": \"P001\", \"name\": \"Worker 001\"}\n"
+    "  ],\n"
+    "  \"relationships\": [\n"
+    "    {\"source\": \"P001\", \"type\": \"INVOLVED_IN\", \"target\": \"INC001\"}\n"
+    "  ]\n"
+    "}\n\n"
+    "Rules:\n"
+    "- Invent stable, short IDs (P001, INC001, SITE001, CAM03, POL001) if the text does not give one.\n"
+    "- Reuse the SAME id for the same real-world entity if it is mentioned more than once.\n"
+    "- Every Incident needs: id, type, severity (LOW/MEDIUM/HIGH/CRITICAL), timestamp (ISO 8601).\n"
+    "- If you are not confident about an entity or relationship, omit it rather than guessing.\n"
+    "- Return ONLY the JSON object. Nothing else.\n"
 )
 
 
@@ -67,11 +46,11 @@ def extract_from_text(incident_text):
     raw_text = data.get("message", {}).get("content", "").strip()
 
     if raw_text.startswith("```"):
-        raw_text = raw_text.strip("```")
+        raw_text = raw_text.strip("`")
         if raw_text.lower().startswith("json"):
             raw_text = raw_text[4:].strip()
 
     try:
         return json.loads(raw_text)
     except json.JSONDecodeError as e:
-        raise ValueError("Extractor did not return valid JSON: " + str(e))
+        raise ValueError("Extractor did not return valid JSON: " + str(e) + "\nRaw output: " + raw_text)
