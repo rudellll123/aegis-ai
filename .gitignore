@@ -2,3 +2,4 @@
 venv/
 *.pyc
 qdrant_data/
+.env
