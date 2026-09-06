@@ -1,5 +1,17 @@
-﻿venv/
+venv/
 __pycache__/
 *.pyc
 .env
 qdrant_data/
+
+# Model weights - auto-download, no need to store in git
+vision/yolov8n.pt
+*.pt
+
+# Test media - not source code
+vision/test_images/
+*.avi
+*.mp4
+
+# Stale duplicate extraction artifacts
+files (2)/

@@ -3,9 +3,11 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "rag"))
-from retrieve import hybrid_search, rerank
+sys.path.append(os.path.join(os.path.dirname(__file__), "vision"))
 
-# Mock database simulating incident log records
+from retrieve import hybrid_search, rerank
+from tracker import summarize_tracked_objects
+
 INCIDENT_DATABASE = [
     {
         "id": "INC-1001",
@@ -23,7 +25,6 @@ INCIDENT_DATABASE = [
     }
 ]
 
-
 @tool
 def search_incidents(query: str) -> str:
     """Search for historical incident summaries matching a keyword query."""
@@ -37,7 +38,6 @@ def search_incidents(query: str) -> str:
         return f"No incidents found matching query: '{query}'"
     return "\n".join(matches)
 
-
 @tool
 def get_incident_details(incident_id: str) -> str:
     """Retrieve full diagnostic logs and metadata details for a specific incident ID."""
@@ -49,7 +49,6 @@ def get_incident_details(incident_id: str) -> str:
             )
     return f"Incident ID '{incident_id}' not found in database records."
 
-
 @tool
 def search_evidence(query: str) -> str:
     """Search safety policies and incident reports using hybrid retrieval (dense + BM25 + reranking) to find the most relevant supporting evidence."""
@@ -57,6 +56,20 @@ def search_evidence(query: str) -> str:
     top = rerank(query, candidates, top_k=3)
     return "\n\n".join(f"[{c['doc_id']}] {c['text']}" for c in top)
 
+@tool
+def analyze_incident_video(video_path: str) -> str:
+    """Analyze a video for incident evidence using computer vision - detects and tracks people, vehicles, and equipment across frames, returning what was seen and when."""
+    result = summarize_tracked_objects(video_path)
+    if result["unique_objects"] == 0:
+        return f"No relevant objects detected in {video_path}."
 
-# Export all investigation tools exactly as required by agent.py
-ALL_TOOLS = [search_incidents, get_incident_details, search_evidence]
+    lines = [f"Analyzed {result['frames_analyzed']} frames, found {result['unique_objects']} tracked object(s):"]
+    for t in result["tracks"]:
+        duration = round(t["last_seen"] - t["first_seen"], 2)
+        lines.append(
+            f"- {t['label']} (track #{t['track_id']}): present {t['first_seen']}s-{t['last_seen']}s "
+            f"(duration {duration}s, confidence {t['max_confidence']})"
+        )
+    return "\n".join(lines)
+
+ALL_TOOLS = [search_incidents, get_incident_details, search_evidence, analyze_incident_video]
