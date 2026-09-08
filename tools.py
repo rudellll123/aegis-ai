@@ -4,9 +4,12 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "rag"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "vision"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "audio"))
 
 from retrieve import hybrid_search, rerank
 from tracker import summarize_tracked_objects
+from transcriber import transcribe_audio
+from speaker import speak_text
 
 INCIDENT_DATABASE = [
     {
@@ -72,4 +75,17 @@ def analyze_incident_video(video_path: str) -> str:
         )
     return "\n".join(lines)
 
-ALL_TOOLS = [search_incidents, get_incident_details, search_evidence, analyze_incident_video]
+@tool
+def transcribe_incident_report(audio_path: str) -> str:
+    """Transcribe a spoken incident report or voice note into text, so it can be searched and reasoned over alongside other evidence."""
+    result = transcribe_audio(audio_path)
+    return f"Transcript (language: {result['language']}): {result['text']}"
+
+@tool
+def speak_response(text: str) -> str:
+    """Convert a text response into spoken audio, saved as a file - use when the user asks for an audible/voice response instead of text."""
+    output_path = "audio/output_speech.wav"
+    speak_text(text, output_path)
+    return f"Speech audio saved to {output_path}"
+
+ALL_TOOLS = [search_incidents, get_incident_details, search_evidence, analyze_incident_video, transcribe_incident_report, speak_response]

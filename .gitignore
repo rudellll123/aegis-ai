@@ -12,6 +12,9 @@ vision/yolov8n.pt
 vision/test_images/
 *.avi
 *.mp4
+audio/test_audio/
+audio/output_speech.wav
+*.wav
 
 # Stale duplicate extraction artifacts
 files (2)/
