@@ -1,1364 +1,431 @@
-                                                         # 🛡️ AegisAI
-
-### Multimodal AI Investigation & Incident Intelligence Platform
+<h1 align="center">🛡️ AegisAI</h1>
+<h3 align="center">Multimodal AI Investigation & Incident Response Platform</h3>
 
 <p align="center">
-
-<img src="https://readme-typing-svg.demolab.com/?font=Fira%20Code&size=20&duration=3000&pause=1000&center=true&vCenter=true&width=800&lines=Multimodal+AI+%7C+Agentic+AI+%7C+RAG+%7C+Knowledge+Graph;Agent+%E2%86%92+Tools+%E2%86%92+Evidence+%E2%86%92+Reasoning;Incident+Intelligence+with+AI+Agents;Built+with+Python+%7C+FastAPI+%7C+Neo4j+%7C+Qdrant+%7C+YOLO+%7C+Whisper" alt="Typing SVG" />
-
+  <img src="https://readme-typing-svg.demolab.com/?font=Fira+Code&size=18&duration=2800&pause=1000&color=39FF14&width=600&lines=Agent+%E2%86%92+Tool+%E2%86%92+Result+%E2%86%92+Agent;Hybrid+RAG+%2B+Knowledge+Graph+%2B+Vision;Built+one+phase+at+a+time%2C+measured+every+step" alt="typing" />
 </p>
 
 <p align="center">
-
-<img src="https://img.shields.io/badge/Project-AegisAI-0A0A0A?style=for-the-badge&logo=shield&logoColor=white" />
-<img src="https://img.shields.io/badge/AI-Agentic_AI-blue?style=for-the-badge" />
-<img src="https://img.shields.io/badge/RAG-Implemented-success?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Knowledge_Graph-Implemented-purple?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Computer_Vision-Implemented-orange?style=for-the-badge" />
-<img src="https://img.shields.io/badge/Audio_AI-Implemented-red?style=for-the-badge" />
-<img src="https://img.shields.io/badge/MCP-Implemented-yellow?style=for-the-badge" />
-
+  <img src="https://img.shields.io/badge/Status-Active%20Development-39FF14?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Phase-6%20of%2012%20Complete-1f6feb?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Runs-100%25%20Local%20(Ollama)-8957e5?style=for-the-badge" />
 </p>
 
 <p align="center">
-
-<a href="https://github.com/rudellll123/aegis-ai">
-<img src="https://img.shields.io/github/stars/rudellll123/aegis-ai?style=flat-square" />
-</a>
-
-<a href="https://github.com/rudellll123/aegis-ai">
-<img src="https://img.shields.io/github/forks/rudellll123/aegis-ai?style=flat-square" />
-</a>
-
-<a href="https://github.com/rudellll123/aegis-ai">
-<img src="https://img.shields.io/github/last-commit/rudellll123/aegis-ai?style=flat-square" />
-</a>
-
-<img src="https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white" />
-<img src="https://img.shields.io/badge/FastAPI-API-009688?style=flat-square&logo=fastapi&logoColor=white" />
-<img src="https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white" />
-
+  <a href="https://github.com/rudellll123"><img src="https://img.shields.io/badge/Author-Rahul%20Jha-181717?style=flat-square&logo=github&logoColor=white" /></a>
+  <a href="https://www.linkedin.com/in/rahuljha174/"><img src="https://img.shields.io/badge/LinkedIn-rahuljha174-0A66C2?style=flat-square&logo=linkedin&logoColor=white" /></a>
+  <a href="mailto:rahuljha1807@gmail.com"><img src="https://img.shields.io/badge/Email-rahuljha1807-D14836?style=flat-square&logo=gmail&logoColor=white" /></a>
 </p>
-
----
-
-## 🧠 What is AegisAI?
-
-**AegisAI** is a multimodal AI investigation and incident-intelligence platform designed to combine information from different data sources and transform it into structured, searchable, and explainable intelligence.
-
-Instead of treating every input independently, AegisAI connects:
-
-* 📄 Documents
-* 🖼️ Images
-* 🎥 Video
-* 🎙️ Audio
-* 🕸️ Knowledge Graph data
-* 📚 Retrieved knowledge
-* 🤖 AI agents
-* 🔌 External tools
-
-The system uses an **agentic architecture** where AI agents can select and execute specialized tools instead of relying only on a single LLM response.
-
-### Core idea
-
-```text
-                 ┌─────────────────────┐
-                 │       User          │
-                 └──────────┬──────────┘
-                            │
-                            ▼
-                 ┌─────────────────────┐
-                 │   Agent Supervisor  │
-                 │    / Orchestrator   │
-                 └──────────┬──────────┘
-                            │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-   📚 RAG Agent       🕸️ Graph Agent      👁️ Vision Agent
-        │                   │                   │
-        ▼                   ▼                   ▼
-     Qdrant              Neo4j             YOLO/VLM
-        │                   │                   │
-        └───────────────────┼───────────────────┘
-                            │
-                            ▼
-                    🎙️ Audio Agent
-                            │
-                            ▼
-                   📝 Evidence / Result
-```
-
----
-
-# ⭐ Why AegisAI?
-
-Traditional AI applications often look like:
-
-```text
-User → LLM → Answer
-```
-
-AegisAI is designed around:
-
-```text
-User
-  ↓
-Agent
-  ↓
-Reasoning
-  ↓
-Tool Selection
-  ↓
-Evidence Retrieval
-  ↓
-Structured Knowledge
-  ↓
-Multimodal Analysis
-  ↓
-Validated Result
-```
-
-This makes the system more suitable for applications where **evidence, relationships, retrieval, and tool execution** matter.
-
----
-
-# 🚀 Key Capabilities
-
-| Capability              | Status                    |
-| ----------------------- | ------------------------- |
-| 🤖 Agentic AI           | ✅ Implemented             |
-| 📚 Advanced RAG         | ✅ Implemented             |
-| 🕸️ Knowledge Graph     | ✅ Implemented             |
-| 👁️ Computer Vision     | ✅ Implemented             |
-| 🎙️ Audio Transcription | ✅ Implemented             |
-| 🔌 MCP Tool Integration | ✅ Implemented             |
-| 🌐 FastAPI Backend      | 🟡 Integrated / Expanding |
-| 🧪 Evaluation Framework | 🟡 Implemented in modules |
-| 🐳 Docker               | ✅ Neo4j containerized     |
-| 🗄️ PostgreSQL          | 🔜 Planned                |
-| ⚡ Redis / Celery        | 🔜 Planned                |
-| 📊 Observability        | 🔜 Planned                |
-| ☁️ AWS Deployment       | 🔜 Planned                |
-| 🖥️ Frontend            | 🔜 Planned                |
-
----
-
-# 🏗️ System Architecture
-
-```text
-                         ┌──────────────────────┐
-                         │        USER          │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │      FastAPI         │
-                         │    API Layer         │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                    ┌───────────────────────────────┐
-                    │       Agent Orchestrator      │
-                    │        / LangGraph            │
-                    └──────────────┬────────────────┘
-                                   │
-             ┌─────────────────────┼─────────────────────┐
-             │                     │                     │
-             ▼                     ▼                     ▼
-      ┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-      │  RAG Agent  │      │ Graph Agent  │      │Vision Agent │
-      └──────┬──────┘      └──────┬───────┘      └──────┬──────┘
-             │                    │                     │
-             ▼                    ▼                     ▼
-       ┌──────────┐          ┌─────────┐         ┌────────────┐
-       │  Qdrant  │          │  Neo4j  │         │ YOLO / VLM │
-       └──────────┘          └─────────┘         └────────────┘
-             │                    │                     │
-             └────────────────────┼─────────────────────┘
-                                  │
-                                  ▼
-                         ┌──────────────────┐
-                         │   Audio Agent    │
-                         │ Whisper / TTS     │
-                         └────────┬─────────┘
-                                  │
-                                  ▼
-                         ┌──────────────────┐
-                         │ Evidence /       │
-                         │ Structured Result│
-                         └──────────────────┘
-```
-
----
-
-# 🔄 Agentic AI Flow
-
-```text
-             User Query
-                  │
-                  ▼
-          ┌───────────────┐
-          │ Agent receives│
-          │    request    │
-          └───────┬───────┘
-                  │
-                  ▼
-          Understand Intent
-                  │
-                  ▼
-          Select Tool / Agent
-                  │
-       ┌──────────┼──────────┐
-       │          │          │
-       ▼          ▼          ▼
-      RAG       Graph      Vision
-       │          │          │
-       └──────────┼──────────┘
-                  │
-                  ▼
-           Retrieve Evidence
-                  │
-                  ▼
-             Reasoning
-                  │
-                  ▼
-          Structured Answer
-```
-
----
-
-# 🧰 Tech Stack
-
-## 🐍 Core Development
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=python,git,github,vscode,linux" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-**Python · Git · GitHub · VS Code · Linux**
+## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> What is AegisAI?
 
----
+AegisAI is a production-style multimodal AI platform that analyzes documents, images, video, audio, and structured data to **investigate incidents, connect evidence, and generate actionable reports for human review**.
 
-## 🤖 AI & Agentic AI
+It's built as the deliberate next step after simpler computer-vision, RAG, and backend projects — folding all of them into one agentic system where retrieval, vision, and reasoning work together as tools inside a single supervisor agent loop.
+
+**The real-world problem:** organizations often have critical information scattered across CCTV footage, images, PDFs, databases, and human reports. Investigating an incident today means manually finding it, inspecting evidence, reading policies, searching historical records, connecting relationships, and writing a report — all by hand. AegisAI's goal is to turn that into one AI-assisted workflow that understands every format and connects the evidence itself, before a human signs off.
+
+> **A worked example:** a construction-site incident occurs at 2:35 PM. AegisAI processes the relevant video, identifies the incident and evidence frames, retrieves the applicable safety policy, queries historical incidents, connects the entities in a knowledge graph, assesses severity, and drafts a report — for a human to approve.
+
+> ⚠️ **Positioning matters here:** AegisAI is an AI-*assisted* investigation system, not one that independently makes high-stakes decisions. Human approval stays in the loop at every stage.
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=python,pytorch,huggingface" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-**Python · PyTorch · Hugging Face · LangGraph · LangChain · Ollama · MCP**
+## <img src="https://media2.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="28"> What Makes It Different
 
-### Technologies
+<div align="center">
 
-* 🐍 Python
-* 🧠 PyTorch
-* 🤗 Hugging Face
-* 🦜 LangChain
-* 🔀 LangGraph
-* 🦙 Ollama
-* 🔌 Model Context Protocol (MCP)
-* 🛠️ Tool calling
-* 🧩 Agent orchestration
+| Traditional Project | AegisAI |
+|---|---|
+| Detects an object | Detects **+ investigates** an incident |
+| Basic vector RAG | Hybrid retrieval + reranking |
+| Single database | PostgreSQL + vector DB + knowledge graph |
+| One LLM call | Stateful multi-step agent workflow |
+| Manual processing | Background jobs and queues |
+| Demo-only deployment | Docker + CI/CD + AWS |
+| No quality measurement | Real AI/RAG evaluation |
+| Limited visibility | Full observability and metrics |
 
----
+</div>
 
-# 📚 Retrieval-Augmented Generation
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
+</p>
 
-AegisAI uses a hybrid retrieval architecture rather than relying exclusively on semantic similarity.
-
-```text
-                 User Query
-                     │
-          ┌──────────┴──────────┐
-          │                     │
-          ▼                     ▼
-   Dense Retrieval         BM25 Retrieval
-          │                     │
-          └──────────┬──────────┘
-                     ▼
-              RRF Fusion
-                     │
-                     ▼
-             Candidate Docs
-                     │
-                     ▼
-             Cross Encoder
-                Reranker
-                     │
-                     ▼
-              Top Documents
-                     │
-                     ▼
-                   LLM
-                     │
-                     ▼
-                Answer
-```
-
-### RAG Stack
-
-* 🗄️ Qdrant
-* 🔎 Dense vector retrieval
-* 🧠 `all-MiniLM-L6-v2`
-* 🔤 BM25
-* 🔀 Reciprocal Rank Fusion (RRF)
-* 🎯 Cross-Encoder reranking
-* 🤗 `cross-encoder/ms-marco-MiniLM-L-6-v2`
-* 🦙 Ollama / local LLM support
-
-### RAG Evaluation
-
-Current evaluation set:
-
-```text
-Test Queries: 4
-Correct source in Top-3: 4
-
-Precision@3 = 100%
-```
-
-> Evaluation is based on the current project test set and is not intended to represent a production-scale benchmark.
-
----
-
-# 🕸️ Knowledge Graph Intelligence
-
-AegisAI represents incidents and their relationships using **Neo4j**.
-
-```text
-                ┌───────────────┐
-                │    PERSON     │
-                └───────┬───────┘
-                        │
-                     INVOLVED
+## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> System Architecture
+                 User / Dashboard
                         │
                         ▼
-                ┌───────────────┐
-                │   INCIDENT    │
-                └───────┬───────┘
-                        │
-                     OCCURRED
+                    FastAPI
                         │
                         ▼
-                ┌───────────────┐
-                │    LOCATION   │
-                └───────────────┘
-```
+              LangGraph Supervisor Agent
+                        │
+ ┌──────────┬───────────┼───────────┬───────────┐
+ ▼          ▼           ▼           ▼           ▼
 
-### Knowledge Graph Features
+RAG Agent Vision Agent Data Agent Knowledge Audio Agent
+Qdrant + YOLO + PostgreSQL Agent Whisper +
+BM25 + ByteTrack + Neo4j + TTS
+Reranker VLM + OpenCV Cypher
+│ │ │ │ │
+└──────────┴───────────┼───────────┴───────────┘
+▼
+Report Agent
+│
+▼
+Notification / Action Tools
+│
+▼
+Human Approval → Action
 
-* 🧩 Entity extraction
-* 🔗 Relationship creation
-* 🕸️ Neo4j graph storage
-* 🔍 Incident retrieval
-* 📍 Location-based investigation
-* 🚨 High-severity incident analysis
-* 👥 People involved in incidents
-* 🧪 Graph validation
-* 📊 Automated graph evaluation
-* 🌐 FastAPI graph endpoints
 
-### Important Engineering Decision
-
-The graph agent does **not** allow the LLM to freely generate arbitrary Cypher queries.
-
-Instead, the system exposes **safe, allow-listed graph operations**.
-
-```text
-LLM
- │
- ▼
-Intent
- │
- ▼
-Allow-listed Tool
- │
- ▼
-Parameterized Graph Operation
- │
- ▼
-Neo4j
-```
-
-This reduces the risk of uncontrolled database operations and makes agent behavior easier to validate.
-
----
-
-# 👁️ Computer Vision
-
-AegisAI includes a computer-vision pipeline for image and video analysis.
-
-### Vision Pipeline
-
-```text
-Image / Video
-      │
-      ▼
-   OpenCV
-      │
-      ▼
-YOLO Detection
-      │
-      ▼
-Object Filtering
-      │
-      ▼
-Tracking
-      │
-      ▼
-Scene Reasoning
-      │
-      ▼
-Structured Observation
-```
-
-### Vision Stack
+**Runs on:** Redis + Celery background workers · OpenTelemetry + Prometheus + Grafana observability · Docker + GitHub Actions CI/CD · AWS (S3 / ECR / ECS / RDS) for production deployment.
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=opencv,pytorch" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-* 👁️ YOLO
-* 🔥 PyTorch
-* 📷 OpenCV
-* 🎯 Object detection
-* 🧭 Object tracking
-* 🧠 Vision-Language Model
-* 🦙 Moondream through Ollama
-* 🎥 Video processing
-* 🕒 Frame timestamps
-* 📦 Bounding boxes
-* 🎯 Confidence filtering
+## <img src="https://media2.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="28"> Full Tech Stack
 
-### Detection Output
+<div align="center">
 
-The vision pipeline can represent detections using information such as:
+| | | | | | |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://skillicons.dev/icons?i=python" width="45"><br><sub><b>Python</b></sub> | <img src="https://skillicons.dev/icons?i=react" width="45"><br><sub><b>React</b></sub> | <img src="https://skillicons.dev/icons?i=nextjs" width="45"><br><sub><b>Next.js</b></sub> | <img src="https://skillicons.dev/icons?i=typescript" width="45"><br><sub><b>TypeScript</b></sub> | <img src="https://skillicons.dev/icons?i=tailwind" width="45"><br><sub><b>Tailwind</b></sub> | <img src="https://skillicons.dev/icons?i=fastapi" width="45"><br><sub><b>FastAPI</b></sub> |
+| <img src="https://skillicons.dev/icons?i=postgres" width="45"><br><sub><b>PostgreSQL</b></sub> | <img src="https://skillicons.dev/icons?i=redis" width="45"><br><sub><b>Redis</b></sub> | <img src="https://skillicons.dev/icons?i=neo4j" width="45"><br><sub><b>Neo4j</b></sub> | <img src="https://skillicons.dev/icons?i=pytorch" width="45"><br><sub><b>PyTorch</b></sub> | <img src="https://skillicons.dev/icons?i=opencv" width="45"><br><sub><b>OpenCV</b></sub> | <img src="https://skillicons.dev/icons?i=huggingface" width="45"><br><sub><b>HF</b></sub> |
+| <img src="https://skillicons.dev/icons?i=docker" width="45"><br><sub><b>Docker</b></sub> | <img src="https://skillicons.dev/icons?i=aws" width="45"><br><sub><b>AWS</b></sub> | <img src="https://skillicons.dev/icons?i=githubactions" width="45"><br><sub><b>GH Actions</b></sub> | <img src="https://skillicons.dev/icons?i=grafana" width="45"><br><sub><b>Grafana</b></sub> | <img src="https://skillicons.dev/icons?i=prometheus" width="45"><br><sub><b>Prometheus</b></sub> | <img src="https://skillicons.dev/icons?i=git" width="45"><br><sub><b>Git</b></sub> |
+| <img src="https://skillicons.dev/icons?i=vscode" width="45"><br><sub><b>VS Code</b></sub> | <img src="https://skillicons.dev/icons?i=pytest" width="45"><br><sub><b>Pytest</b></sub> | <img src="https://skillicons.dev/icons?i=vercel" width="45"><br><sub><b>Vercel</b></sub> | <img src="https://skillicons.dev/icons?i=linux" width="45"><br><sub><b>Linux</b></sub> | <img src="https://skillicons.dev/icons?i=graphql" width="45"><br><sub><b>Pydantic-ish</b></sub> | <img src="https://skillicons.dev/icons?i=cpp" width="45"><br><sub><b>C++</b></sub> |
 
-```json
-{
-  "label": "person",
-  "confidence": 0.91,
-  "bbox": [120, 80, 300, 420],
-  "frame_timestamp": 12.4
-}
-```
-
----
-
-# 🎙️ Audio Intelligence
-
-AegisAI includes audio processing capabilities for converting speech into structured text.
-
-### Audio Pipeline
-
-```text
-Audio
-  │
-  ▼
-Whisper
-  │
-  ▼
-Speech-to-Text
-  │
-  ├── Language
-  │
-  ├── Text
-  │
-  └── Timestamped Segments
-```
-
-### Audio Stack
-
-* 🎙️ OpenAI Whisper
-* 🔊 Speech-to-text
-* 🌍 Language detection
-* ⏱️ Timestamped segments
-* 🔧 FFmpeg
-
----
-
-# 🔌 MCP — Model Context Protocol
-
-One of the major architectural improvements in AegisAI is the MCP integration.
-
-The agent has been rewired as an **MCP client**.
-
-Instead of importing tools directly:
-
-```text
-Agent
-  │
-  └── hardcoded imports
-```
-
-the architecture becomes:
-
-```text
-Agent
-  │
-  ▼
-MCP Client
-  │
-  ▼
-MCP Tool Server
-  │
-  ▼
-Available Tools
-```
-
-### MCP Workflow
-
-```text
-1. Agent starts
-       ↓
-2. MCP server spawned as subprocess
-       ↓
-3. MCP handshake
-       ↓
-4. list_tools()
-       ↓
-5. Discover available tools
-       ↓
-6. Model selects tool
-       ↓
-7. MCP executes tool
-       ↓
-8. Result returned to agent
-```
-
-### Current MCP Validation
-
-The MCP implementation has been tested with:
-
-* `llama3.1`
-* `llama3.2:1b`
-
-The larger model correctly supports native tool calls but can be slower on CPU.
-
-The smaller model can produce tool-call information as plain-text JSON instead of native `tool_calls`, which is a model behavior limitation rather than an MCP protocol failure.
-
-### Production Direction
-
-For production-grade native tool calling, the architecture can be switched to a model/provider with reliable structured tool-call support, such as Anthropic's tool-calling models.
-
----
-
-# 🌐 Backend
-
-AegisAI is designed around a REST API architecture.
+</div>
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=python,fastapi" />
-
+  <img src="https://img.shields.io/badge/LangGraph-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Qdrant-DC244C?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/BM25-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Cross--Encoder%20Reranking-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/YOLO%20%2B%20ByteTrack-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Whisper-412991?style=for-the-badge&logo=openai&logoColor=white" />
+  <img src="https://img.shields.io/badge/Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+  <img src="https://img.shields.io/badge/Claude%20API-D97757?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/MCP-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Ollama-000000?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/vLLM-black?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Celery-37814A?style=for-the-badge&logo=celery&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cypher-4581C3?style=for-the-badge" />
 </p>
-
-### Backend Technologies
-
-* 🐍 Python
-* ⚡ FastAPI
-* 📦 Pydantic
-* 🌐 REST APIs
-* 📖 Swagger / OpenAPI
-* 🔌 Tool-based service architecture
-
----
-
-# 🗄️ Data Layer
-
-### Implemented
-
-* 🕸️ Neo4j
-* 🔎 Qdrant
-
-### Planned
-
-* 🐘 PostgreSQL
-* ⚡ Redis
-* 🔄 Celery
-
-The project intentionally separates **graph data**, **vector retrieval**, and future transactional application data.
-
----
-
-# 🐳 Infrastructure
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=docker,git,github,linux" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-### Current
+## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> Development Phases
 
-* 🐳 Docker
-* 🐙 GitHub
-* 🌿 Git
-* 🐧 Linux-compatible development
-* 🗄️ Neo4j Docker container
+<table>
+<tr><td width="100%">
 
-### Planned
+<img src="https://img.shields.io/badge/PHASE%200-ARCHITECTURE%20%26%20SETUP-1f6feb?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
 
-* ☁️ AWS
-* 🔄 GitHub Actions
-* 📊 Prometheus
-* 📈 Grafana
-* 🔭 OpenTelemetry
-* ⚡ Redis
-* 🔄 Celery
+VS Code workspace, Git, Python virtual environment, and initial project structure.
 
----
+`Python` `Git` `VS Code`
 
-# 🖥️ Frontend
+</td></tr>
+</table>
 
-The frontend is part of the planned final integration.
+<table>
+<tr><td width="100%">
 
-### Planned Stack
+<img src="https://img.shields.io/badge/PHASE%201-AGENTIC%20AI%20FOUNDATION-8957e5?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+LLM tool calling, LangGraph agent state/nodes/edges, routing, and human-in-the-loop basics. Built a tiny working agent with two tools (`search_incidents`, `get_incident_details`) over a mock incident database, running 100% locally via Ollama.
+
+`LangGraph` `LangChain` `Ollama` `Python`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%202-ADVANCED%20RAG-e8590c?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+Qdrant vector store, dense retrieval, BM25 sparse retrieval, hybrid search via Reciprocal Rank Fusion, metadata filtering, cross-encoder reranking, and a measured retrieval evaluation. Wired into the Phase 1 agent as the `search_evidence` tool.
+
+**Outcome:** 4/4 test queries retrieved their correct document in the top 3 — **100% precision@3**, confirmed end-to-end with the live agent correctly routing real questions to this tool.
+
+`Qdrant` `sentence-transformers` `rank-bm25` `Cross-Encoder`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%203-KNOWLEDGE%20GRAPH-1a7f37?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+Neo4j graph storing People, Incidents, and Locations as connected entities, for multi-hop relationship queries a vector search can't answer (e.g. "who was at high-severity incidents at this location").
+
+**Security-first design:** the agent is deliberately **not** allowed to generate raw Cypher. `KnowledgeAgent` exposes only a fixed, parameterized set of safe methods — the LLM picks *which* operation to run and *what parameter* to pass, but can never construct the query itself. Same principle as parameterized SQL over string-concatenated queries.
+
+`Neo4j` `Cypher`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%204-COMPUTER%20VISION-6f42c1?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+YOLOv8n object detection filtered through an allow-list + confidence threshold, ByteTrack multi-object tracking for persistent identity across frames, and a local VLM (moondream) for narrative scene description. Wired into the agent as `analyze_incident_video`.
+
+**Real finding worth knowing:** the VLM hallucinated objects (2 buses + potted plants) that weren't in a test image, while YOLO correctly counted 1 bus + 3 people. Design rule going forward: YOLO's structured output is the source of truth for counts; the VLM is supplementary narrative only, never a factual claim.
+
+`YOLOv8` `ByteTrack` `OpenCV` `VLM (moondream)`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%205-VOICE%20%2F%20AUDIO-c9184a?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+Whisper (local, "base" size) for speech-to-text with per-segment timestamps, and `pyttsx3` for offline text-to-speech. Wired into the agent as `transcribe_incident_report` and `speak_response`. Verified against a known smoke-test clip — exact, word-for-word correct transcript.
+
+`Whisper` `pyttsx3`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%206-MCP%20%2B%20TOOL%20ECOSYSTEM-0d6efd?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+All 6 tools (incident search, RAG, vision, audio) exposed behind a standard MCP server (`FastMCP`), verified live via MCP Inspector. `agent.py` rewired as an async MCP client — spawns the tool server as a subprocess over stdio, discovers tools dynamically via `list_tools()` instead of a hardcoded Python import, and converts them into LangGraph-compatible tools via `langchain_mcp_adapters`.
+
+`MCP` `FastMCP` `langchain-mcp-adapters`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%207-PRODUCTION%20BACKEND-fd7e14?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+
+Redis + Celery for background processing, caching, job status, and scalable workloads. Swaps the mock incident list for real PostgreSQL.
+
+`Redis` `Celery` `PostgreSQL`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%208-EVALUATION-198754?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/◐%20PARTIAL-FFCC00?style=flat-square" />
+
+RAG accuracy and groundedness, agent success rate, tool-selection accuracy, vision metrics, and latency. Retrieval evaluation already shipped in Phase 2 — the rest is pending.
+
+`Pytest` `Custom eval scripts`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%209-OBSERVABILITY-6610f2?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+
+OpenTelemetry traces, Prometheus metrics, and Grafana dashboards for full pipeline visibility.
+
+`OpenTelemetry` `Prometheus` `Grafana`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%2010-AWS%20%2B%20CI%2FCD-0dcaf0?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+
+S3, ECR, ECS, RDS, IAM basics, and a GitHub Actions deployment pipeline.
+
+`AWS` `GitHub Actions` `Docker`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%2011-FRONTEND%20%2F%20UX-d63384?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+
+Polished dashboard, incident review flow, evidence viewer, knowledge-graph view, and an AI investigation interface.
+
+`React` `Next.js` `TypeScript` `Tailwind`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%2012-FINAL%20INTEGRATION-212529?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+
+End-to-end testing, full documentation, architecture diagram, live demo, and resume/LinkedIn presentation of the finished system.
+
+`Docs` `Demo`
+
+</td></tr>
+</table>
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=react,nextjs,typescript,tailwind" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-* ⚛️ React
-* ▲ Next.js
-* 📘 TypeScript
-* 🎨 Tailwind CSS
-* 📊 Investigation dashboard
-* 🕸️ Knowledge Graph visualization
-* 📚 RAG interface
-* 👁️ Vision results
-* 🎙️ Audio results
+## <img src="https://media2.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="28"> What's Working Right Now
 
----
+A real conversation with the live agent, unedited:
 
-# 📂 Project Structure
+You: What's the policy on forklifts near walkways?
+[agent decided to call tool] search_evidence({'query': 'forklifts near walkways'})
+[tool result] [policy-002] Forklifts and heavy vehicles must maintain a
+minimum 3-meter clearance from pedestrian walkways. Spotters are required
+when reversing near occupied zones.
+Agent: Based on the search results, forklifts must maintain a minimum
+3-meter clearance from pedestrian walkways, with spotters required when
+reversing near occupied zones...
 
-```text
-aegis-ai/
-│
-├── agents/
-│   └── graph/
-│       └── graph_agent.py
-│
-├── audio/
-│   ├── speaker.py
-│   └── transcriber.py
-│
-├── knowledge_graph/
-│   ├── detector.py
-│   ├── evaluate_graph.py
-│   ├── extractor.py
-│   ├── ingestion.py
-│   ├── knowledge_graph_api.py
-│   ├── schema.py
-│   ├── service.py
-│   └── validation.py
-│
-├── rag/
-│   └── ...
-│
-├── vision/
-│   ├── detector.py
-│   ├── detect_image.py
-│   ├── detect_video.py
-│   ├── scene_reasoner.py
-│   ├── schema.py
-│   ├── service.py
-│   └── tracker.py
-│
-├── agent.py
-├── setup_agent.py
-├── setup_kg.py
-├── tools.py
-├── docker-compose.yml
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
 
----
+The `search_evidence` tool runs a full hybrid RAG pipeline underneath:
 
-# 🧪 Evaluation
+| Stage | Technique | Role |
+|---|---|---|
+| Dense retrieval | `all-MiniLM-L6-v2` embeddings + Qdrant | Understands meaning ("machinery" ≈ "forklift") |
+| Sparse retrieval | BM25 | Catches exact terms, IDs, and codes |
+| Fusion | Reciprocal Rank Fusion | Combines both rankings |
+| Reranking | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Final, confident scoring |
 
-AegisAI includes evaluation logic instead of relying only on subjective manual testing.
+**Measured outcome:** 100% precision@3 on a 4-query evaluation set — every test query retrieved its correct source document in the top 3 results.
 
-### RAG
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
+</p>
 
-```text
-Metric:
-Precision@3
+## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> Setup & Run
 
-Current test set:
-4 queries
-
-Correct:
-4 / 4
-
-Result:
-100%
-```
-
-### Knowledge Graph
-
-Graph evaluation includes queries such as:
-
-```text
-✓ Incidents at a specific location
-✓ High-severity people at a location
-✓ Expected entities
-✓ Pass / fail evaluation
-✓ Accuracy calculation
-```
-
-This provides a foundation for expanding toward more systematic evaluation.
-
----
-
-# 🔐 Engineering & Safety Principles
-
-AegisAI is designed around several engineering principles.
-
-### 1. Structured Tool Access
-
-Agents interact with capabilities through defined tools rather than unrestricted system access.
-
-### 2. Allow-listed Graph Operations
-
-The graph agent exposes specific operations instead of allowing unrestricted LLM-generated database queries.
-
-### 3. Evidence-Based Retrieval
-
-RAG retrieves supporting documents before generating an answer.
-
-### 4. Confidence Filtering
-
-Vision detections can be filtered using confidence thresholds.
-
-### 5. Separation of Responsibilities
-
-Different components have different responsibilities:
-
-```text
-RAG       → Documents / Knowledge
-Graph     → Relationships
-Vision    → Visual Evidence
-Audio     → Speech Evidence
-Agent     → Reasoning / Orchestration
-MCP       → Tool Connectivity
-API       → External Interface
-```
-
----
-
-# ⚡ Quick Start
-
-## 1️⃣ Clone the repository
+Runs 100% free and local via [Ollama](https://ollama.com) — no API key, no billing.
 
 ```bash
-git clone https://github.com/rudellll123/aegis-ai.git
-
-cd aegis-ai
-```
-
----
-
-## 2️⃣ Create a virtual environment
-
-### Windows
-
-```powershell
-python -m venv venv
-
-.\venv\Scripts\Activate.ps1
-```
-
-### Linux / macOS
-
-```bash
-python3 -m venv venv
-
-source venv/bin/activate
-```
-
----
-
-## 3️⃣ Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-# 🕸️ Start Neo4j
-
-AegisAI includes a Docker Compose configuration for Neo4j.
-
-```bash
-docker compose up -d
-```
-
-Neo4j services:
-
-```text
-Browser:
-http://localhost:7474
-
-Bolt:
-bolt://localhost:7687
-```
-
-> For production, move database credentials into environment variables rather than keeping credentials directly in `docker-compose.yml`.
-
----
-
-# 🦙 Ollama
-
-Install Ollama separately and pull the model required by your local configuration.
-
-Example:
-
-```bash
+# 0. Install Ollama (one-time), then pull a model that supports tool calling
 ollama pull llama3.1
-```
 
-For vision reasoning:
+# 1. Create and activate a virtual environment
+python3 -m venv venv
+source venv/bin/activate        # Windows PowerShell: venv\Scripts\Activate.ps1
 
-```bash
-ollama pull moondream
-```
+# 2. Install dependencies
+pip install -r requirements.txt
 
----
+# 3. Ingest the evidence corpus into the local vector store (one-time)
+cd rag
+python ingest.py
+cd ..
 
-# ▶️ Run AegisAI
-
-The main agent entry point is:
-
-```bash
+# 4. Run the agent (make sure Ollama is running in the background)
 python agent.py
 ```
 
-Additional setup scripts are available in the repository:
+Try asking it:
+- `Any incidents involving a forklift?`
+- `What's the policy on forklifts near walkways?`
+- `Tell me more about INC-1002`
 
-```text
-setup_agent.py
-setup_kg.py
-```
-
-Use the relevant setup script according to the component you want to initialize.
-
----
-
-# 🧪 Run Knowledge Graph Evaluation
-
-```bash
-python knowledge_graph/evaluate_graph.py
-```
-
----
-
-# 📚 RAG Evaluation
-
-The RAG module contains its evaluation workflow.
-
-From the repository root:
-
+Check retrieval quality directly:
 ```bash
 cd rag
 python evaluate.py
 ```
 
----
-
-# 🗺️ Development Roadmap
-
-## ✅ Completed
-
-### Phase 0 — Foundation
-
-* Python environment
-* Project structure
-* Git/GitHub
-* Basic configuration
-
-### Phase 1 — Agentic AI
-
-* Agent architecture
-* Tool execution
-* Agent reasoning
-* Tool routing
-
-### Phase 2 — Advanced RAG
-
-* Qdrant
-* Dense retrieval
-* BM25
-* RRF
-* Cross-encoder reranking
-* RAG evaluation
-
-### Phase 3 — Knowledge Graph
-
-* Neo4j
-* Entity extraction
-* Relationship creation
-* Graph validation
-* Graph retrieval
-* Graph evaluation
-* Graph agent
-
-### Phase 4 — Computer Vision
-
-* YOLO
-* Object detection
-* Confidence filtering
-* Bounding boxes
-* Video processing
-* Tracking
-* Vision-language reasoning
-
-### Phase 5 — Audio
-
-* Whisper
-* Speech-to-text
-* Language detection
-* Timestamped transcription
-* Speaker-related processing
-
-### Phase 6 — MCP
-
-* MCP client
-* MCP subprocess server
-* MCP handshake
-* Dynamic `list_tools()`
-* Tool discovery
-* Model tool calling
-* MCP validation with local LLMs
-
----
-
-# 🔜 Upcoming Phases
-
-### Phase 7 — Production Backend
-
-* Complete FastAPI API layer
-* Authentication
-* User management
-* Database integration
-* Job management
-* Async processing
-
-### Phase 8 — Evaluation
-
-* Larger evaluation datasets
-* RAG metrics
-* Agent evaluation
-* Graph evaluation
-* Vision evaluation
-* Regression tests
-
-### Phase 9 — Observability
-
-* OpenTelemetry
-* Prometheus
-* Grafana
-* Logging
-* Tracing
-* Latency monitoring
-
-### Phase 10 — Cloud & CI/CD
-
-* AWS
-* Docker production deployment
-* GitHub Actions
-* Automated testing
-* Automated deployment
-
-### Phase 11 — Frontend
-
-* React / Next.js
-* TypeScript
-* Tailwind
-* Investigation dashboard
-* Graph visualization
-* Multimodal result viewer
-
-### Phase 12 — Final Integration
-
-```text
-                ┌───────────────┐
-                │   Frontend    │
-                └───────┬───────┘
-                        │
-                        ▼
-                ┌───────────────┐
-                │    FastAPI    │
-                └───────┬───────┘
-                        │
-                        ▼
-                ┌───────────────┐
-                │ Agent System  │
-                └───────┬───────┘
-                        │
-        ┌───────────────┼────────────────┐
-        │               │                │
-        ▼               ▼                ▼
-      RAG             Graph            Vision
-        │               │                │
-        ▼               ▼                ▼
-     Qdrant           Neo4j          YOLO/VLM
-        │               │                │
-        └───────────────┼────────────────┘
-                        │
-                        ▼
-                      Audio
-                        │
-                        ▼
-                Final Intelligence
-```
-
----
-
-# 📊 Phase Progress
-
-```text
-Phase 0  ████████████████████  100%
-Phase 1  ████████████████████  100%
-Phase 2  ████████████████████  100%
-Phase 3  ████████████████████  100%
-Phase 4  ████████████████████  100%
-Phase 5  ████████████████████  100%
-Phase 6  ████████████████████  100%
-
-Phase 7  ░░░░░░░░░░░░░░░░░░░░    Planned
-Phase 8  ░░░░░░░░░░░░░░░░░░░░    Partial
-Phase 9  ░░░░░░░░░░░░░░░░░░░░    Planned
-Phase 10 ░░░░░░░░░░░░░░░░░░░░    Planned
-Phase 11 ░░░░░░░░░░░░░░░░░░░░    Planned
-Phase 12 ░░░░░░░░░░░░░░░░░░░░    Planned
-```
-
----
-
-# 🧠 What Makes This Project Resume-Worthy?
-
-AegisAI demonstrates experience across several areas rather than being only an LLM wrapper.
-
-### AI Engineering
-
-* Agentic AI
-* Tool calling
-* RAG
-* LLM integration
-* Multimodal AI
-
-### Backend Engineering
-
-* FastAPI
-* REST APIs
-* Modular services
-* Data validation
-* API architecture
-
-### Data Engineering
-
-* Vector databases
-* Knowledge graphs
-* Hybrid retrieval
-* Entity extraction
-* Relationship modeling
-
-### Computer Vision
-
-* YOLO
-* Object detection
-* Tracking
-* Video analysis
-* VLM reasoning
-
-### Audio AI
-
-* Whisper
-* Speech recognition
-* Timestamped transcription
-
-### AI Infrastructure
-
-* Docker
-* MCP
-* Local LLM deployment
-* Evaluation pipelines
-
----
-
-
-# 🔍 RAG vs Knowledge Graph
-
-AegisAI intentionally uses both.
-
-| Feature                    | RAG     | Knowledge Graph |
-| -------------------------- | ------- | --------------- |
-| Documents                  | ✅       | 🟡              |
-| Semantic search            | ✅       | ❌               |
-| Relationships              | 🟡      | ✅               |
-| Entity connections         | 🟡      | ✅               |
-| Structured facts           | 🟡      | ✅               |
-| Natural-language retrieval | ✅       | ✅               |
-| Multi-hop relationships    | Limited | ✅               |
-| Vector similarity          | ✅       | ❌               |
-
-### Combined architecture
-
-```text
-             User Question
-                   │
-          ┌────────┴────────┐
-          ▼                 ▼
-        RAG               Graph
-          │                 │
-      Documents         Relationships
-          │                 │
-          └────────┬────────┘
-                   ▼
-               AI Agent
-                   │
-                   ▼
-          Evidence + Context
-                   │
-                   ▼
-              Final Answer
-```
-
----
-
-# 🧩 Design Philosophy
-
-AegisAI follows:
-
-```text
-Modular
-   +
-Tool-driven
-   +
-Evidence-based
-   +
-Multimodal
-   +
-Evaluated
-   +
-Production-oriented
-```
-
-The goal is not simply:
-
-> "Build a chatbot."
-
-The goal is:
-
-> **Build an AI system that can reason over multiple forms of evidence, access specialized tools, maintain structured relationships, and produce useful investigation intelligence.**
-
----
-
-# 🔮 Future Vision
-
-The long-term architecture aims to evolve AegisAI into a complete AI investigation platform:
-
-```text
-Documents ───────┐
-Images ──────────┤
-Video ───────────┤
-Audio ───────────┤
-Databases ───────┤
-External APIs ───┤
-                  ▼
-           ┌──────────────┐
-           │ AegisAI      │
-           │ Agent System │
-           └──────┬───────┘
-                  │
-       ┌──────────┼──────────┐
-       ▼          ▼          ▼
-      RAG       Graph      Vision
-       │          │          │
-       └──────────┼──────────┘
-                  │
-                  ▼
-            Reasoning Layer
-                  │
-                  ▼
-          Investigation Report
-                  │
-                  ▼
-        Human Review / Action
-```
-
----
-
-# 🛠️ Production Hardening Checklist
-
-Before calling the platform production-ready, the following improvements should be completed:
-
-* [ ] Move secrets to `.env`
-* [ ] Remove hardcoded Neo4j credentials
-* [ ] Remove machine-specific FFmpeg paths
-* [ ] Add authentication
-* [ ] Add authorization
-* [ ] Add structured logging
-* [ ] Add automated tests
-* [ ] Add CI/CD
-* [ ] Add observability
-* [ ] Add rate limiting
-* [ ] Add background jobs
-* [ ] Add PostgreSQL
-* [ ] Add Redis
-* [ ] Add cloud deployment
-* [ ] Add frontend
-* [ ] Add larger evaluation datasets
-
----
-
-# 📈 Future Scalability
-
-AegisAI can evolve toward:
-
-```text
-                    Load Balancer
-                          │
-                          ▼
-                    FastAPI API
-                          │
-              ┌───────────┴───────────┐
-              ▼                       ▼
-         Agent Workers           Job Workers
-              │                       │
-      ┌───────┼───────┐              │
-      ▼       ▼       ▼              ▼
-     RAG    Graph   Vision         Celery
-      │       │       │              │
-      ▼       ▼       ▼              ▼
-   Qdrant   Neo4j   Object Store   Redis
-              │
-              ▼
-          PostgreSQL
-```
-
----
-
-# 📚 Technologies at a Glance
+> **Note:** local models are smaller than hosted models, so tool-calling accuracy is noticeably rougher — expected, and it still teaches the same agent loop. For more reliable behavior, add API credit and switch `ChatOllama(...)` to `ChatAnthropic(...)` in `agent.py`.
 
 <p align="center">
-
-<img src="https://skillicons.dev/icons?i=python,pytorch,fastapi,opencv,docker,git,github,neo4j,qdrant,postgres,redis,aws,react,nextjs,typescript,tailwind,linux,vscode" />
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
-### AI
+## <img src="https://media2.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="28"> Project Structure
 
-`Python` · `PyTorch` · `Hugging Face` · `Ollama` · `LangChain` · `LangGraph`
+aegis-ai/
+├── agent.py # LangGraph agent: state, nodes, routing, run loop
+├── tools.py # search_incidents, get_incident_details, search_evidence
+├── requirements.txt
+├── mcp_server/
+│ └── incident_server.py # FastMCP server exposing all 6 tools over MCP
+├── rag/
+│ ├── documents.py # Evidence corpus (policies + incident reports)
+│ ├── ingest.py # Chunk → embed → upsert into Qdrant
+│ ├── retrieve.py # Dense, BM25, hybrid, and reranked search
+│ └── evaluate.py # Precision@k retrieval evaluation
+├── knowledge_graph/
+│ └── graph_agent.py # Neo4j-backed KnowledgeAgent, safe parameterized queries
+├── vision/
+│ ├── detector.py # YOLOv8 object detection + allow-list/confidence filter
+│ ├── tracker.py # ByteTrack multi-object tracking
+│ └── scene_reasoner.py # VLM (moondream) scene description
+├── audio/
+│ ├── transcriber.py # Whisper speech-to-text
+│ └── speaker.py # pyttsx3 text-to-speech
+└── README.md
 
-### Retrieval
 
-`Qdrant` · `Sentence Transformers` · `BM25` · `RRF` · `Cross Encoder`
-
-### Graph
-
-`Neo4j` · `Cypher` · `Knowledge Graph`
-
-### Vision
-
-`YOLO` · `OpenCV` · `ByteTrack` · `VLM` · `Moondream`
-
-### Audio
-
-`Whisper` · `FFmpeg` · `Speech-to-Text`
-
-### Backend
-
-`FastAPI` · `Pydantic` · `REST` · `OpenAPI` · `Swagger`
-
-### Agent Infrastructure
-
-`MCP` · `Tool Calling` · `Subprocess Tool Servers`
-
-### Infrastructure
-
-`Docker` · `Git` · `GitHub`
-
-### Planned
-
-`PostgreSQL` · `Redis` · `Celery` · `AWS` · `GitHub Actions` · `OpenTelemetry` · `Prometheus` · `Grafana` · `React` · `Next.js` · `TypeScript` · `Tailwind`
-
----
-
-# 🌟 Project Status
-
-### Current milestone
-
-```text
-AegisAI
-│
-├── 🤖 Agentic AI          ✅
-├── 📚 Advanced RAG        ✅
-├── 🕸️ Knowledge Graph     ✅
-├── 👁️ Computer Vision     ✅
-├── 🎙️ Audio Intelligence  ✅
-├── 🔌 MCP                 ✅
-│
-├── 🌐 Production Backend  🔜
-├── 🧪 Advanced Evaluation 🔜
-├── 📊 Observability       🔜
-├── ☁️ AWS + CI/CD         🔜
-├── 🖥️ Frontend            🔜
-└── 🚀 Final Integration   🔜
-```
-
----
-
-# 👨‍💻 Author
-
-## Rahul Jha
-
-B.Tech Student | AI Engineering | Backend Development | Agentic AI
+*(`frontend/` and `infrastructure/` get added as later phases ship — see the Phase table above.)*
 
 <p align="center">
-
-<a href="https://github.com/rudellll123">
-<img src="https://img.shields.io/badge/GitHub-rudellll123-181717?style=for-the-badge&logo=github" />
-</a>
-
-<a href="https://www.linkedin.com/in/rahuljha174/">
-<img src="https://img.shields.io/badge/LinkedIn-Rahul%20Jha-0A66C2?style=for-the-badge&logo=linkedin" />
-</a>
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
 
----
+## <img src="https://media2.giphy.com/media/LnQjpWaON8nhr21vNW/giphy.gif" width="28"> Resume Positioning
 
-# ⭐ Support
+**Target project description** for the finished system:
 
-If you find AegisAI interesting, consider giving the repository a ⭐.
+> *Built a multimodal AI investigation platform that analyzes video, documents, images, audio, and structured data; uses agentic orchestration, hybrid RAG, and knowledge-graph retrieval to connect evidence; and generates actionable investigation reports with evaluation, observability, and cloud deployment.*
+
+**What's already provable today** (safe to claim now, with evidence):
+- Designed and implemented a hybrid RAG pipeline (dense + BM25 + Reciprocal Rank Fusion + cross-encoder reranking) achieving 100% precision@3 on a retrieval evaluation set
+- Built a LangGraph-based agentic system with dynamic tool routing across multiple specialized tools
+- Designed a knowledge graph agent that deliberately restricts the LLM to safe, parameterized queries instead of free-form Cypher generation — an injection-safety design decision
+- Built a computer vision pipeline (YOLOv8 + ByteTrack + VLM) and found/documented a real VLM hallucination case that shaped the system's trust model
+- Built a voice pipeline (Whisper + TTS) for spoken incident reports
+- Exposed the full tool ecosystem behind a standard MCP server and rewired the agent as an MCP client, decoupling tool access from direct Python imports
+- Ran the full stack locally via Ollama with zero cloud dependency, then designed for a hosted-LLM upgrade path
+
+**Discipline going forward:** only claim a technology or metric on the final resume *after* it's actually implemented and measured — this README's Phase Dashboard above is the single source of truth for what's real versus what's planned.
 
 <p align="center">
-
-### 🛡️ AegisAI
-
-**From raw evidence → structured knowledge → intelligent investigation**
-
+  <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
 </p>
+
+## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> Learning Principle
+
+Built one phase at a time. Every phase leaves two things behind: a working component in the repository, and the ability to explain the technology and design decisions in an interview.
 
 ---
 
 <p align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer" />
-
+  Built by <a href="https://github.com/rudellll123">Rahul Jha</a> · <a href="https://www.linkedin.com/in/rahuljha174/">LinkedIn</a> · <a href="mailto:rahuljha1807@gmail.com">Email</a>
 </p>
+
+## Phase 6 note
+Agent successfully rewired as an MCP client: spawns the tool server as a subprocess, completes the MCP handshake, and discovers all 6 tools live via list_tools() instead of a hardcoded import. Verified with llama3.1 (correct tool_calls format, but slow on CPU) and llama3.2:1b (fast, but emits tool calls as plain-text JSON instead of using native tool_calls -- a known small-model limitation, not an MCP defect). Production fix: swap to ChatAnthropic for reliable native tool-calling at usable speed.
 
