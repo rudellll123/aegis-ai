@@ -409,3 +409,6 @@ Built one phase at a time. Every phase leaves two things behind: a working compo
 <p align="center">
   Built by <a href="https://github.com/rudellll123">Rahul Jha</a> · <a href="https://www.linkedin.com/in/rahuljha174/">LinkedIn</a> · <a href="mailto:rahuljha1807@gmail.com">Email</a>
 </p>
+
+## Phase 6 note
+Agent successfully rewired as an MCP client: spawns the tool server as a subprocess, completes the MCP handshake, and discovers all 6 tools live via list_tools() instead of a hardcoded import. Verified with llama3.1 (correct tool_calls format, but slow on CPU) and llama3.2:1b (fast, but emits tool calls as plain-text JSON instead of using native tool_calls -- a known small-model limitation, not an MCP defect). Production fix: swap to ChatAnthropic for reliable native tool-calling at usable speed.
