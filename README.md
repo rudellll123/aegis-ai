@@ -1,4 +1,4 @@
-<h1 align="center">🛡️ AegisAI</h1>
+﻿<h1 align="center">🛡️ AegisAI</h1>
 <h3 align="center">Multimodal AI Investigation & Incident Response Platform</h3>
 
 <p align="center">
@@ -7,7 +7,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Active%20Development-39FF14?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Phase-2%20of%2012%20Complete-1f6feb?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Phase-6%20of%2012%20Complete-1f6feb?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Runs-100%25%20Local%20(Ollama)-8957e5?style=for-the-badge" />
 </p>
 
@@ -59,33 +59,32 @@ It's built as the deliberate next step after simpler computer-vision, RAG, and b
 </p>
 
 ## <img src="https://media2.giphy.com/media/QssGEmpkyEOhBCb7e1/giphy.gif?cid=ecf05e47a0n3gi1bfqntqmob8g9aid1oyj2wr3ds3mg700bl&rid=giphy.gif" width="28"> System Architecture
+                 User / Dashboard
+                        │
+                        ▼
+                    FastAPI
+                        │
+                        ▼
+              LangGraph Supervisor Agent
+                        │
+ ┌──────────┬───────────┼───────────┬───────────┐
+ ▼          ▼           ▼           ▼           ▼
 
-```
-                     User / Dashboard
-                            │
-                            ▼
-                        FastAPI
-                            │
-                            ▼
-                  LangGraph Supervisor Agent
-                            │
-     ┌──────────┬───────────┼───────────┬───────────┐
-     ▼          ▼           ▼           ▼           ▼
- RAG Agent  Vision Agent  Data Agent  Knowledge  Audio Agent
- Qdrant +   YOLO +        PostgreSQL   Agent     Whisper +
- BM25 +     ByteTrack +               Neo4j +     TTS
- Reranker   VLM + OpenCV               Cypher
-     │          │           │           │           │
-     └──────────┴───────────┼───────────┴───────────┘
-                            ▼
-                       Report Agent
-                            │
-                            ▼
-                 Notification / Action Tools
-                            │
-                            ▼
-                  Human Approval → Action
-```
+RAG Agent Vision Agent Data Agent Knowledge Audio Agent
+Qdrant + YOLO + PostgreSQL Agent Whisper +
+BM25 + ByteTrack + Neo4j + TTS
+Reranker VLM + OpenCV Cypher
+│ │ │ │ │
+└──────────┴───────────┼───────────┴───────────┘
+▼
+Report Agent
+│
+▼
+Notification / Action Tools
+│
+▼
+Human Approval → Action
+
 
 **Runs on:** Redis + Celery background workers · OpenTelemetry + Prometheus + Grafana observability · Docker + GitHub Actions CI/CD · AWS (S3 / ECR / ECS / RDS) for production deployment.
 
@@ -170,9 +169,11 @@ Qdrant vector store, dense retrieval, BM25 sparse retrieval, hybrid search via R
 <table>
 <tr><td width="100%">
 
-<img src="https://img.shields.io/badge/PHASE%203-KNOWLEDGE%20GRAPH-1a7f37?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+<img src="https://img.shields.io/badge/PHASE%203-KNOWLEDGE%20GRAPH-1a7f37?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
 
-Neo4j, Cypher, entity extraction, and relationship-aware retrieval to connect people, equipment, and incidents.
+Neo4j graph storing People, Incidents, and Locations as connected entities, for multi-hop relationship queries a vector search can't answer (e.g. "who was at high-severity incidents at this location").
+
+**Security-first design:** the agent is deliberately **not** allowed to generate raw Cypher. `KnowledgeAgent` exposes only a fixed, parameterized set of safe methods — the LLM picks *which* operation to run and *what parameter* to pass, but can never construct the query itself. Same principle as parameterized SQL over string-concatenated queries.
 
 `Neo4j` `Cypher`
 
@@ -182,23 +183,13 @@ Neo4j, Cypher, entity extraction, and relationship-aware retrieval to connect pe
 <table>
 <tr><td width="100%">
 
-<img src="https://img.shields.io/badge/PHASE%204-COMPUTER%20VISION-6f42c1?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+<img src="https://img.shields.io/badge/PHASE%204-COMPUTER%20VISION-6f42c1?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
 
-Integrate the existing YOLO/ByteTrack pipeline (from the Construction Safety project) and add VLM-based scene reasoning.
+YOLOv8n object detection filtered through an allow-list + confidence threshold, ByteTrack multi-object tracking for persistent identity across frames, and a local VLM (moondream) for narrative scene description. Wired into the agent as `analyze_incident_video`.
 
-`YOLO` `ByteTrack` `OpenCV` `VLM`
+**Real finding worth knowing:** the VLM hallucinated objects (2 buses + potted plants) that weren't in a test image, while YOLO correctly counted 1 bus + 3 people. Design rule going forward: YOLO's structured output is the source of truth for counts; the VLM is supplementary narrative only, never a factual claim.
 
-</td></tr>
-</table>
-
-<table>
-<tr><td width="100%">
-
-<img src="https://img.shields.io/badge/PHASE%205-VOICE%20%2F%20AUDIO-c9184a?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
-
-Whisper speech-to-text, agent-driven voice interaction, and text-to-speech responses.
-
-`Whisper` `TTS`
+`YOLOv8` `ByteTrack` `OpenCV` `VLM (moondream)`
 
 </td></tr>
 </table>
@@ -206,11 +197,23 @@ Whisper speech-to-text, agent-driven voice interaction, and text-to-speech respo
 <table>
 <tr><td width="100%">
 
-<img src="https://img.shields.io/badge/PHASE%206-MCP%20%2B%20TOOL%20ECOSYSTEM-0d6efd?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/○%20PLANNED-8b949e?style=flat-square" />
+<img src="https://img.shields.io/badge/PHASE%205-VOICE%20%2F%20AUDIO-c9184a?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
 
-Expose database, RAG, graph, vision, and report capabilities as standardized agent tools via MCP.
+Whisper (local, "base" size) for speech-to-text with per-segment timestamps, and `pyttsx3` for offline text-to-speech. Wired into the agent as `transcribe_incident_report` and `speak_response`. Verified against a known smoke-test clip — exact, word-for-word correct transcript.
 
-`MCP`
+`Whisper` `pyttsx3`
+
+</td></tr>
+</table>
+
+<table>
+<tr><td width="100%">
+
+<img src="https://img.shields.io/badge/PHASE%206-MCP%20%2B%20TOOL%20ECOSYSTEM-0d6efd?style=for-the-badge" /> &nbsp; <img src="https://img.shields.io/badge/✔%20DONE-39FF14?style=flat-square" />
+
+All 6 tools (incident search, RAG, vision, audio) exposed behind a standard MCP server (`FastMCP`), verified live via MCP Inspector. `agent.py` rewired as an async MCP client — spawns the tool server as a subprocess over stdio, discovers tools dynamically via `list_tools()` instead of a hardcoded Python import, and converts them into LangGraph-compatible tools via `langchain_mcp_adapters`.
+
+`MCP` `FastMCP` `langchain-mcp-adapters`
 
 </td></tr>
 </table>
@@ -295,16 +298,15 @@ End-to-end testing, full documentation, architecture diagram, live demo, and res
 
 A real conversation with the live agent, unedited:
 
-```
 You: What's the policy on forklifts near walkways?
-  [agent decided to call tool] search_evidence({'query': 'forklifts near walkways'})
-  [tool result] [policy-002] Forklifts and heavy vehicles must maintain a
-  minimum 3-meter clearance from pedestrian walkways. Spotters are required
-  when reversing near occupied zones.
+[agent decided to call tool] search_evidence({'query': 'forklifts near walkways'})
+[tool result] [policy-002] Forklifts and heavy vehicles must maintain a
+minimum 3-meter clearance from pedestrian walkways. Spotters are required
+when reversing near occupied zones.
 Agent: Based on the search results, forklifts must maintain a minimum
 3-meter clearance from pedestrian walkways, with spotters required when
 reversing near occupied zones...
-```
+
 
 The `search_evidence` tool runs a full hybrid RAG pipeline underneath:
 
@@ -364,20 +366,30 @@ python evaluate.py
 
 ## <img src="https://media2.giphy.com/media/iY8CRBdQXODJSCERIr/giphy.gif" width="28"> Project Structure
 
-```
 aegis-ai/
-├── agent.py              # LangGraph agent: state, nodes, routing, run loop
-├── tools.py              # search_incidents, get_incident_details, search_evidence
+├── agent.py # LangGraph agent: state, nodes, routing, run loop
+├── tools.py # search_incidents, get_incident_details, search_evidence
 ├── requirements.txt
+├── mcp_server/
+│ └── incident_server.py # FastMCP server exposing all 6 tools over MCP
 ├── rag/
-│   ├── documents.py       # Evidence corpus (policies + incident reports)
-│   ├── ingest.py           # Chunk → embed → upsert into Qdrant
-│   ├── retrieve.py         # Dense, BM25, hybrid, and reranked search
-│   └── evaluate.py         # Precision@k retrieval evaluation
+│ ├── documents.py # Evidence corpus (policies + incident reports)
+│ ├── ingest.py # Chunk → embed → upsert into Qdrant
+│ ├── retrieve.py # Dense, BM25, hybrid, and reranked search
+│ └── evaluate.py # Precision@k retrieval evaluation
+├── knowledge_graph/
+│ └── graph_agent.py # Neo4j-backed KnowledgeAgent, safe parameterized queries
+├── vision/
+│ ├── detector.py # YOLOv8 object detection + allow-list/confidence filter
+│ ├── tracker.py # ByteTrack multi-object tracking
+│ └── scene_reasoner.py # VLM (moondream) scene description
+├── audio/
+│ ├── transcriber.py # Whisper speech-to-text
+│ └── speaker.py # pyttsx3 text-to-speech
 └── README.md
-```
 
-*(`agents/`, `frontend/`, `knowledge_graph/`, `infrastructure/`, and more get added as later phases ship — see the Phase table above.)*
+
+*(`frontend/` and `infrastructure/` get added as later phases ship — see the Phase table above.)*
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="450">
@@ -392,6 +404,10 @@ aegis-ai/
 **What's already provable today** (safe to claim now, with evidence):
 - Designed and implemented a hybrid RAG pipeline (dense + BM25 + Reciprocal Rank Fusion + cross-encoder reranking) achieving 100% precision@3 on a retrieval evaluation set
 - Built a LangGraph-based agentic system with dynamic tool routing across multiple specialized tools
+- Designed a knowledge graph agent that deliberately restricts the LLM to safe, parameterized queries instead of free-form Cypher generation — an injection-safety design decision
+- Built a computer vision pipeline (YOLOv8 + ByteTrack + VLM) and found/documented a real VLM hallucination case that shaped the system's trust model
+- Built a voice pipeline (Whisper + TTS) for spoken incident reports
+- Exposed the full tool ecosystem behind a standard MCP server and rewired the agent as an MCP client, decoupling tool access from direct Python imports
 - Ran the full stack locally via Ollama with zero cloud dependency, then designed for a hosted-LLM upgrade path
 
 **Discipline going forward:** only claim a technology or metric on the final resume *after* it's actually implemented and measured — this README's Phase Dashboard above is the single source of truth for what's real versus what's planned.
