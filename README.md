@@ -429,3 +429,6 @@ Built one phase at a time. Every phase leaves two things behind: a working compo
 ## Phase 6 note
 Agent successfully rewired as an MCP client: spawns the tool server as a subprocess, completes the MCP handshake, and discovers all 6 tools live via list_tools() instead of a hardcoded import. Verified with llama3.1 (correct tool_calls format, but slow on CPU) and llama3.2:1b (fast, but emits tool calls as plain-text JSON instead of using native tool_calls -- a known small-model limitation, not an MCP defect). Production fix: swap to ChatAnthropic for reliable native tool-calling at usable speed.
 
+
+## Phase 7 note
+Migrated incidents from an in-memory Python dict to real PostgreSQL (via SQLAlchemy), running in Docker alongside Redis. Added Celery for background job processing: start_video_analysis submits a video-analysis job and returns immediately with a job ID, while check_video_analysis polls for the result once the Celery worker finishes -- so the agent no longer blocks on long-running vision jobs. Kept the original synchronous analyze_incident_video tool alongside the async pair, so the agent can choose blocking (quick clips) vs non-blocking (heavy clips) based on the situation. All 8 tools (2 Postgres-backed, 2 new async, 4 unchanged) verified discoverable through the same MCP layer built in Phase 6.

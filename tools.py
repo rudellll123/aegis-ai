@@ -11,6 +11,8 @@ from tracker import summarize_tracked_objects
 from transcriber import transcribe_audio
 from speaker import speak_text
 from db import SessionLocal, Incident
+from celery_app import celery_app
+from tasks import analyze_video_task
 
 @tool
 def search_incidents(query: str) -> str:
@@ -54,13 +56,42 @@ def search_evidence(query: str) -> str:
 
 @tool
 def analyze_incident_video(video_path: str) -> str:
-    """Analyze a video for incident evidence using computer vision - detects and tracks people, vehicles, and equipment across frames, returning what was seen and when."""
+    """Analyze a short video for incident evidence using computer vision (blocking/synchronous) - detects and tracks people, vehicles, and equipment across frames, returning what was seen and when. For long or heavy videos, use start_video_analysis instead so the agent doesn't block."""
     result = summarize_tracked_objects(video_path)
     if result["unique_objects"] == 0:
         return f"No relevant objects detected in {video_path}."
 
     lines = [f"Analyzed {result['frames_analyzed']} frames, found {result['unique_objects']} tracked object(s):"]
     for t in result["tracks"]:
+        duration = round(t["last_seen"] - t["first_seen"], 2)
+        lines.append(
+            f"- {t['label']} (track #{t['track_id']}): present {t['first_seen']}s-{t['last_seen']}s "
+            f"(duration {duration}s, confidence {t['max_confidence']})"
+        )
+    return "\n".join(lines)
+
+@tool
+def start_video_analysis(video_path: str) -> str:
+    """Start analyzing a video for incident evidence in the background (asynchronous) - use this for long or heavy videos instead of analyze_incident_video, since it returns immediately with a job ID instead of blocking. Check progress and get the result with check_video_analysis."""
+    task = analyze_video_task.delay(video_path)
+    return f"Video analysis started in the background. Job ID: {task.id}. Use check_video_analysis to get the result once ready."
+
+@tool
+def check_video_analysis(task_id: str) -> str:
+    """Check the status of a background video analysis job started by start_video_analysis, and return the result if it's ready."""
+    result = celery_app.AsyncResult(task_id)
+    if result.status == "PENDING":
+        return f"Job {task_id} is still queued or running. Try again shortly."
+    if result.status == "FAILURE":
+        return f"Job {task_id} failed: {result.result}"
+    if result.status != "SUCCESS":
+        return f"Job {task_id} status: {result.status}. Not ready yet."
+
+    data = result.result
+    if data["unique_objects"] == 0:
+        return f"No relevant objects detected in {data['video_path']}."
+    lines = [f"Analyzed {data['frames_analyzed']} frames, found {data['unique_objects']} tracked object(s):"]
+    for t in data["tracks"]:
         duration = round(t["last_seen"] - t["first_seen"], 2)
         lines.append(
             f"- {t['label']} (track #{t['track_id']}): present {t['first_seen']}s-{t['last_seen']}s "
@@ -81,4 +112,4 @@ def speak_response(text: str) -> str:
     speak_text(text, output_path)
     return f"Speech audio saved to {output_path}"
 
-ALL_TOOLS = [search_incidents, get_incident_details, search_evidence, analyze_incident_video, transcribe_incident_report, speak_response]
+ALL_TOOLS = [search_incidents, get_incident_details, search_evidence, analyze_incident_video, start_video_analysis, check_video_analysis, transcribe_incident_report, speak_response]
