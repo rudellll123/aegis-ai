@@ -8,6 +8,12 @@ MCP protocol (stdio transport). It asks the server what tools exist
 that live connection. Same six tools as before - the difference is HOW
 they are discovered and invoked.
 
+Phase 9: the agent's own reasoning step (call_agent) is wrapped in an
+OpenTelemetry span, separate from the tool-execution spans traced
+inside mcp_server/incident_server.py. These are NOT yet linked into a
+single end-to-end trace, since trace context isn't propagated across
+the MCP process boundary - a known, documented limitation.
+
 Run:
     python agent.py
 """
@@ -24,6 +30,7 @@ from langgraph.prebuilt import ToolNode
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from langchain_mcp_adapters.tools import load_mcp_tools
+from tracing import tracer
 
 
 class AgentState(TypedDict):
@@ -35,8 +42,14 @@ def build_graph(tools):
     llm_with_tools = llm.bind_tools(tools)
 
     async def call_agent(state: AgentState) -> AgentState:
-        response = await llm_with_tools.ainvoke(state["messages"])
-        return {"messages": [response]}
+        with tracer.start_as_current_span("agent.reasoning_step") as span:
+            span.set_attribute("agent.message_count", len(state["messages"]))
+            response = await llm_with_tools.ainvoke(state["messages"])
+            tool_calls = getattr(response, "tool_calls", None)
+            span.set_attribute("agent.called_tool", bool(tool_calls))
+            if tool_calls:
+                span.set_attribute("agent.tool_names", ",".join(tc["name"] for tc in tool_calls))
+            return {"messages": [response]}
 
     tool_node = ToolNode(tools)
 

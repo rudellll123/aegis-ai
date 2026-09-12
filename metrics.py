@@ -7,8 +7,13 @@ start_metrics_server exposes them on an HTTP endpoint for Prometheus
 to scrape - called once by whichever process is actually serving
 requests (agent.py, mcp_server/incident_server.py), not by one-off
 scripts, so the metrics reflect real usage.
+
+The startup print goes to stderr, not stdout - the MCP server talks
+to its client over stdio, so anything printed to stdout gets treated
+as a JSON-RPC message and corrupts the protocol stream.
 """
 
+import sys
 import time
 import functools
 from prometheus_client import Counter, Histogram, start_http_server
@@ -41,4 +46,4 @@ def track_metrics(tool_name):
 
 def start_metrics_server(port=8001):
     start_http_server(port)
-    print(f"Prometheus metrics available at http://localhost:{port}/metrics")
+    print(f"Prometheus metrics available at http://localhost:{port}/metrics", file=sys.stderr)
