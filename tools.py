@@ -13,8 +13,10 @@ from speaker import speak_text
 from db import SessionLocal, Incident
 from celery_app import celery_app
 from tasks import analyze_video_task
+from metrics import track_metrics
 
 @tool
+@track_metrics("search_incidents")
 def search_incidents(query: str) -> str:
     """Search for historical incident summaries matching a keyword query."""
     query_lower = query.lower()
@@ -33,6 +35,7 @@ def search_incidents(query: str) -> str:
     return "\n".join(matches)
 
 @tool
+@track_metrics("get_incident_details")
 def get_incident_details(incident_id: str) -> str:
     """Retrieve full diagnostic logs and metadata details for a specific incident ID."""
     session = SessionLocal()
@@ -48,6 +51,7 @@ def get_incident_details(incident_id: str) -> str:
         session.close()
 
 @tool
+@track_metrics("search_evidence")
 def search_evidence(query: str) -> str:
     """Search safety policies and incident reports using hybrid retrieval (dense + BM25 + reranking) to find the most relevant supporting evidence."""
     candidates = hybrid_search(query, top_k=10)
@@ -55,6 +59,7 @@ def search_evidence(query: str) -> str:
     return "\n\n".join(f"[{c['doc_id']}] {c['text']}" for c in top)
 
 @tool
+@track_metrics("analyze_incident_video")
 def analyze_incident_video(video_path: str) -> str:
     """Analyze a short video for incident evidence using computer vision (blocking/synchronous) - detects and tracks people, vehicles, and equipment across frames, returning what was seen and when. For long or heavy videos, use start_video_analysis instead so the agent doesn't block."""
     result = summarize_tracked_objects(video_path)
@@ -71,12 +76,14 @@ def analyze_incident_video(video_path: str) -> str:
     return "\n".join(lines)
 
 @tool
+@track_metrics("start_video_analysis")
 def start_video_analysis(video_path: str) -> str:
     """Start analyzing a video for incident evidence in the background (asynchronous) - use this for long or heavy videos instead of analyze_incident_video, since it returns immediately with a job ID instead of blocking. Check progress and get the result with check_video_analysis."""
     task = analyze_video_task.delay(video_path)
     return f"Video analysis started in the background. Job ID: {task.id}. Use check_video_analysis to get the result once ready."
 
 @tool
+@track_metrics("check_video_analysis")
 def check_video_analysis(task_id: str) -> str:
     """Check the status of a background video analysis job started by start_video_analysis, and return the result if it's ready."""
     result = celery_app.AsyncResult(task_id)
@@ -100,12 +107,14 @@ def check_video_analysis(task_id: str) -> str:
     return "\n".join(lines)
 
 @tool
+@track_metrics("transcribe_incident_report")
 def transcribe_incident_report(audio_path: str) -> str:
     """Transcribe a spoken incident report or voice note into text, so it can be searched and reasoned over alongside other evidence."""
     result = transcribe_audio(audio_path)
     return f"Transcript (language: {result['language']}): {result['text']}"
 
 @tool
+@track_metrics("speak_response")
 def speak_response(text: str) -> str:
     """Convert a text response into spoken audio, saved as a file - use when the user asks for an audible/voice response instead of text."""
     output_path = "audio/output_speech.wav"
