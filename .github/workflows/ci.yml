@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  eval-suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build the RAG vector index
+        run: python rag/ingest.py
+
+      - name: Run RAG evaluation (precision@3)
+        run: python rag/evaluate.py
+
+      - name: Run vision evaluation
+        run: python eval/vision_eval.py
+
+  api-smoke-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: aegisai_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install lightweight API dependencies
+        run: pip install -r requirements-api.txt httpx
+
+      - name: Start API and run smoke test
+        env:
+          DATABASE_URL: postgresql://postgres:testpass@localhost:5432/aegisai_test
+        run: |
+          python -c "
+          from fastapi.testclient import TestClient
+          from api import app
+          client = TestClient(app)
+          r = client.get('/health')
+          assert r.status_code == 200, r.text
+          assert r.json()['status'] == 'healthy'
+          r = client.get('/incidents?query=forklift')
+          assert r.status_code == 200
+          assert r.json()['count'] == 1
+          r = client.get('/incidents/INC-1002')
+          assert r.status_code == 200
+          assert r.json()['severity'] == 'Medium'
+          print('All API smoke tests passed.')
+          "
