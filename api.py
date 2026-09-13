@@ -6,25 +6,50 @@ from the full agent - NOT the heavy ML tools (vision, audio, RAG
 reranking), since those need several GB of RAM to even load their
 models and would not fit a free-tier deployment's memory limits.
 
-The full multimodal agent (agent.py) still runs locally / via MCP for
-development and demos; this is the deliberately scoped-down piece
-that's actually deployed.
-
-Run locally:
-    uvicorn api:app --reload
-
-Run in Docker:
-    see Dockerfile
+On startup, creates the incidents table if missing and seeds it with
+the same two records used throughout development - avoids depending on
+being able to reach the database from outside Render's network, which
+proved unreliable from a local machine during testing.
 """
 
 from fastapi import FastAPI, HTTPException
-from db import SessionLocal, Incident
+from db import SessionLocal, Incident, Base, engine
 
 app = FastAPI(
     title="AegisAI Incident API",
     description="Lightweight deployed subset of AegisAI - incident search and lookup, backed by PostgreSQL.",
     version="1.0.0",
 )
+
+SEED_DATA = [
+    Incident(
+        id="INC-1001",
+        title="Forklift near-miss in Loading Dock B",
+        severity="Low",
+        description="A forklift reversed unexpectedly without its backup alarm sounding. Nearby pedestrian stepped back safely.",
+        date="2026-08-30",
+    ),
+    Incident(
+        id="INC-1002",
+        title="Minor chemical spill in Mixing Lab",
+        severity="Medium",
+        description="Approximately 500ml of cleaning solvent leaked from an unsecured container. Cleaned using standard spill kit.",
+        date="2026-08-31",
+    ),
+]
+
+
+@app.on_event("startup")
+def init_db():
+    Base.metadata.create_all(engine)
+    session = SessionLocal()
+    try:
+        for inc in SEED_DATA:
+            if session.get(Incident, inc.id) is None:
+                session.add(inc)
+        session.commit()
+    finally:
+        session.close()
 
 
 @app.get("/")
@@ -38,7 +63,6 @@ def root():
 
 @app.get("/health")
 def health():
-    """Basic health check - also verifies the database connection works."""
     session = SessionLocal()
     try:
         session.query(Incident).first()
@@ -51,7 +75,6 @@ def health():
 
 @app.get("/incidents")
 def search_incidents(query: str = ""):
-    """Search incidents by keyword in title or description."""
     session = SessionLocal()
     try:
         all_incidents = session.query(Incident).all()
@@ -68,7 +91,6 @@ def search_incidents(query: str = ""):
 
 @app.get("/incidents/{incident_id}")
 def get_incident_details(incident_id: str):
-    """Get full details for a specific incident ID."""
     session = SessionLocal()
     try:
         inc = session.get(Incident, incident_id.upper())
