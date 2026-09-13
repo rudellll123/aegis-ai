@@ -13,12 +13,20 @@ proved unreliable from a local machine during testing.
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from db import SessionLocal, Incident, Base, engine
 
 app = FastAPI(
     title="AegisAI Incident API",
     description="Lightweight deployed subset of AegisAI - incident search and lookup, backed by PostgreSQL.",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 SEED_DATA = [
@@ -105,3 +113,5 @@ def get_incident_details(incident_id: str):
         }
     finally:
         session.close()
+
+
