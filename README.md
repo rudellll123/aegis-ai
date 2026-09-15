@@ -1,3 +1,9 @@
+<h1 align="center">
+
+🛡️ AegisAI
+
+</h1>
+
 <h3 align="center">
 
 Multimodal AI Investigation & Incident Response Platform
@@ -13,7 +19,7 @@ Multimodal AI Investigation & Incident Response Platform
 <p align="center">
 
 <img src="https://img.shields.io/badge/Status-Active%20Development-39FF14?style=for-the-badge" />{=html}
-<img src="https://img.shields.io/badge/Phases-0--12%20Implemented-1f6feb?style=for-the-badge" />{=html}
+<img src="https://img.shields.io/badge/Phases-0--12%20Completed-1f6feb?style=for-the-badge" />{=html}
 <img src="https://img.shields.io/badge/Deployment-Render-8957e5?style=for-the-badge" />{=html}
 <img src="https://img.shields.io/badge/Runtime-Local%20AI%20%2B%20Cloud%20API-212529?style=for-the-badge" />{=html}
 
@@ -104,61 +110,73 @@ Quality measurement     Manual testing          Evaluation suites
 
 System Architecture
 
-                         ┌─────────────────────┐
-                         │   User / Dashboard  │
-                         └──────────┬──────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         🖥️ PRESENTATION LAYER                               │
+│                    Next.js + React + TypeScript + Tailwind                  │
+│          Dashboard • Incidents • Evidence • Uploads • Investigation UI      │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │ REST / HTTP
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            ⚡ API LAYER                                      │
+│                         FastAPI + Pydantic                                  │
+│          Health • Incidents • Video Jobs • Audio • Investigation APIs       │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                       🧠 AGENT ORCHESTRATION LAYER                          │
+│                         LangGraph Supervisor                                │
+│              State • Routing • Tool Calling • Human-in-the-Loop             │
+└───────────────┬──────────────────┬──────────────────┬────────────────────────┘
+                │                  │                  │
+                ▼                  ▼                  ▼
+┌──────────────────────┐ ┌──────────────────────┐ ┌──────────────────────────┐
+│ 🔎 RAG / Evidence    │ │ 👁️ Vision Agent      │ │ 🗄️ Data Agent            │
+│ Qdrant               │ │ YOLOv8               │ │ PostgreSQL               │
+│ BM25                 │ │ ByteTrack            │ │ SQLAlchemy               │
+│ RRF                  │ │ OpenCV               │ │ Incident Data            │
+│ Cross-Encoder        │ │ VLM                  │ │ Job / Result State       │
+└──────────┬───────────┘ └──────────┬───────────┘ └────────────┬─────────────┘
+           │                        │                           │
+           └────────────────────────┼───────────────────────────┘
                                     │
-                                    ▼
-                         ┌─────────────────────┐
-                         │       FastAPI       │
-                         │    REST API Layer   │
-                         └──────────┬──────────┘
-                                    │
-                                    ▼
-                    ┌──────────────────────────────┐
-                    │     LangGraph Supervisor     │
-                    │       Agent / Router         │
-                    └──────────────┬───────────────┘
-                                   │
-                  ┌────────────────┼────────────────┐
-                  │                │                │
-                  ▼                ▼                ▼
-           ┌────────────┐   ┌────────────┐   ┌────────────┐
-           │ RAG Agent  │   │Vision Agent│   │ Data Agent │
-           └─────┬──────┘   └─────┬──────┘   └─────┬──────┘
-                 │                │                │
-                 ▼                ▼                ▼
-          Qdrant + BM25     YOLO + ByteTrack   PostgreSQL
-          + Reranker        + OpenCV + VLM
-                 │                │
-                 └────────┬───────┘
-                          │
-             ┌────────────┼────────────┐
-             │            │            │
-             ▼            ▼            ▼
-       ┌──────────┐ ┌──────────┐ ┌────────────┐
-       │Knowledge │ │  Audio   │ │ Async Jobs │
-       │  Agent   │ │  Agent   │ │ Celery     │
-       └────┬─────┘ └────┬─────┘ │ Redis      │
-            │            │       └──────┬─────┘
-            ▼            ▼              │
-          Neo4j       Whisper/TTS       │
-            │            │              │
-            └────────────┼──────────────┘
-                         │
-                         ▼
-                  ┌───────────────┐
-                  │ Report / Tool │
-                  │    Results    │
-                  └───────┬───────┘
-                          │
-                          ▼
-                  ┌───────────────┐
-                  │ Human Review  │
-                  └───────────────┘
+                    ┌───────────────┴────────────────┐
+                    ▼                                ▼
+┌──────────────────────────────────┐   ┌─────────────────────────────────────┐
+│ 🕸️ KNOWLEDGE + AUDIO LAYER       │   │ 🔌 MCP TOOL ECOSYSTEM              │
+│ Neo4j + Cypher                   │   │ FastMCP Server                      │
+│ Whisper STT                      │   │ MCP Client                          │
+│ pyttsx3 TTS                      │   │ Dynamic list_tools()                │
+└────────────────┬─────────────────┘   └──────────────────┬──────────────────┘
+                 │                                        │
+                 └────────────────────┬───────────────────┘
+                                      ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         ⚙️ ASYNC PROCESSING LAYER                            │
+│                         Redis + Celery                                      │
+│                Queue • Worker • Job ID • Status • Result                    │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                    📊 EVALUATION + OBSERVABILITY LAYER                      │
+│       Pytest • RAG Evaluation • Agent Evaluation • Vision • Latency         │
+│       Prometheus Metrics • Grafana Dashboards • OpenTelemetry Traces        │
+└──────────────────────────────────────┬───────────────────────────────────────┘
+                                       │
+                                       ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         🚀 DEPLOYMENT LAYER                                  │
+│     Docker • GitHub Actions CI/CD • Production Health Verification          │
+│                         Render + PostgreSQL                                  │
+│                    🌐 Live API: aegis-ai-b3k8.onrender.com                  │
+└──────────────────────────────────────────────────────────────────────────────┘
 
-Infrastructure Layer
 
+### Infrastructure Layer
+
+``` text
 Docker
   │
   ├── PostgreSQL
@@ -894,7 +912,7 @@ OpenTelemetry                      ✅ Implemented
 Docker                             ✅ Implemented
 GitHub Actions                     ✅ Implemented
 Next.js Frontend                   ✅ Implemented
-Render API Deployment              ✅ Deployed
+Render API Deployment              🚀 Deployed
 AWS Architecture                   🧩 Designed
 Full Multimodal Cloud Deployment   🧩 Future Scope
 
