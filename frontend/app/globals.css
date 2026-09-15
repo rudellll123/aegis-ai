@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  /* Base surface colors - near-black, not pure black, for depth */
+  --color-bg: #0a0a0c;
+  --color-bg-elevated: #131316;
+  --color-bg-card: #16161a;
+  --color-border: #2a2a30;
+  --color-border-subtle: #1c1c20;
+
+  /* Text */
+  --color-text-primary: #e8e6e1;
+  --color-text-secondary: #9b9891;
+  --color-text-muted: #5c5a56;
+
+  /* Single sharp accent - amber, investigation/alert feel */
+  --color-accent: #e8952e;
+  --color-accent-bright: #ffb347;
+  --color-accent-dim: #7a5420;
+
+  /* Severity system - muted, not cartoonish */
+  --color-sev-low: #5b8a72;
+  --color-sev-medium: #d4a03f;
+  --color-sev-high: #c1553a;
+
+  /* Fonts */
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+  --font-body: var(--font-body);
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  background-color: var(--color-bg);
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
+/* Subtle grain/noise texture overlay for depth - avoids flat corporate look */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background-color: var(--color-accent-dim);
+  color: var(--color-accent-bright);
+}
