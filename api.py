@@ -44,6 +44,27 @@ SEED_DATA = [
         description="Approximately 500ml of cleaning solvent leaked from an unsecured container. Cleaned using standard spill kit.",
         date="2026-08-31",
     ),
+    Incident(
+        id="INC-1003",
+        title="Unlabeled chemical drum found in Storage Bay 2",
+        severity="High",
+        description="A 55-gallon drum with no hazard labeling was discovered during a routine audit. Contents unknown pending lab analysis.",
+        date="2026-09-02",
+    ),
+    Incident(
+        id="INC-1004",
+        title="Slip hazard from coolant leak near Machine 4",
+        severity="Low",
+        description="Minor coolant drip created a small slip hazard on the shop floor. Area cordoned off and cleaned within 15 minutes.",
+        date="2026-09-05",
+    ),
+    Incident(
+        id="INC-1005",
+        title="Fire alarm triggered by welding smoke in Bay 7",
+        severity="Medium",
+        description="Welding operations set off the smoke detector. No fire present; alarm reset after ventilation.",
+        date="2026-09-08",
+    ),
 ]
 
 
@@ -88,7 +109,7 @@ def search_incidents(query: str = ""):
         all_incidents = session.query(Incident).all()
         query_lower = query.lower()
         matches = [
-            {"id": inc.id, "title": inc.title, "severity": inc.severity}
+            {"id": inc.id, "title": inc.title, "severity": inc.severity, "date": inc.date}
             for inc in all_incidents
             if not query or query_lower in inc.title.lower() or query_lower in inc.description.lower()
         ]
@@ -113,5 +134,3 @@ def get_incident_details(incident_id: str):
         }
     finally:
         session.close()
-
-
