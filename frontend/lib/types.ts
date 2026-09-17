@@ -2,6 +2,7 @@ export type Incident = {
   id: string;
   title: string;
   severity: string;
+  date: string;
 };
 
 export type IncidentDetail = Incident & {
