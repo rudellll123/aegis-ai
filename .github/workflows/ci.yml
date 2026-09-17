@@ -9,6 +9,7 @@ on:
 jobs:
   eval-suite:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,8 +30,10 @@ jobs:
       - name: Run vision evaluation
         run: python eval/vision_eval.py
 
+
   api-smoke-test:
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:16
@@ -44,6 +47,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -66,11 +70,49 @@ jobs:
               r = client.get('/health')
               assert r.status_code == 200, r.text
               assert r.json()['status'] == 'healthy'
+
               r = client.get('/incidents?query=forklift')
               assert r.status_code == 200
               assert r.json()['count'] == 1
+
               r = client.get('/incidents/INC-1002')
               assert r.status_code == 200
               assert r.json()['severity'] == 'Medium'
+
               print('All API smoke tests passed.')
           "
+
+
+  deploy-production:
+    name: Verify Production Deployment
+
+    needs:
+      - eval-suite
+      - api-smoke-test
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: https://aegis-ai-b3k8.onrender.com
+
+    steps:
+      - name: Wait for Render deployment
+        env:
+          HEALTH_URL: https://aegis-ai-b3k8.onrender.com/health
+        run: |
+          for i in {1..45}; do
+            echo "Checking production health (attempt $i/45)..."
+
+            if curl --fail --silent --show-error "$HEALTH_URL" > /tmp/health.json; then
+              echo "Production API is healthy."
+              cat /tmp/health.json
+              exit 0
+            fi
+
+            echo "Production API is not ready yet. Waiting 10 seconds..."
+            sleep 10
+          done
+
+          echo "Production API did not become healthy within the timeout."
+          exit 1
